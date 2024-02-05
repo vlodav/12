@@ -1,0 +1,394 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <stdlib.h>
+#include <Windows.h>
+#include <iomanip>
+using namespace std;
+string namefile;
+struct student
+{
+	student()
+	{
+		familia = numbergroup = "";
+		ocenka1 = ocenka2 = ocenka3 = 0;
+	}
+	string familia;
+	string numbergroup;
+	int ocenka1;
+	int ocenka2;
+	int ocenka3;
+};
+ostream& operator <<(ostream& os, const student& studi)
+{
+	os << studi.familia <<" " << studi.numbergroup<<" " << studi.ocenka1<<" " << studi.ocenka2 <<" " << studi.ocenka3;
+	return os;
+}
+istream& operator >>(istream& is, student& studi)
+{
+	is >> studi.familia >> studi.numbergroup >>  studi.ocenka1 >> studi.ocenka2 >>studi.ocenka3;
+	return is;
+}
+void vibor()
+{
+	cout << "Выберети номер действия:" << endl;
+	cout << "1. Загрузить все данные из файла на экран; " << endl;
+	cout << "2. Ввести новые данные в фаил; " << endl;
+	cout << "3. Добавить данных в конец файла; " << endl;
+	cout << "4. Сортировка базы данных по алфавиту (по фамилии); " << endl;
+	cout << "5. Список задолжников; " << endl;
+	cout << "6. Фамилию того кто лучше всех сдал экзамены; " << endl;
+	cout << "7. Определить средний балл по данному предмету; " << endl;
+	cout << "0. Выход из программы; " << endl;
+}
+void getdan_1()
+{
+	ifstream mufile;
+	cout << "введите путь и имя файла: ";
+	cin >> namefile;
+	mufile.open(namefile);
+	if (!mufile.is_open())
+	{
+		cout << "произошла ошибка при открытии файла!!!" << endl;
+	}
+	else
+	{
+		cout << "ТАБЛИЦА СТУДЕНТОВ" << endl;
+		cout <<"---------------------------------------------------"<<endl;
+		cout << "|" << setw(13) << left << "ФАМИЛИЯ" << "|" << setw(7) << left << "НОМЕР.ГР" << "|" << setw(8)
+		<<left<< "ОЦЕНКА_1" << "|" << setw(8) <<left<< "ОЦЕНКА_2" << "|" << setw(8)<<left << "ОЦЕНКА_3" << "|"<<endl;
+		cout << "---------------------------------------------------" <<endl;
+		while (true)
+		{
+			student num;
+			mufile >> num;
+			if (mufile.eof())
+			{
+				break;
+			}
+			cout << "|" << setw(13) << left << num.familia;
+			cout << "|" << setw(8) << left << num.numbergroup;
+			cout << "|" << setw(8) << left << num.ocenka1;
+			cout << "|" << setw(8) << left << num.ocenka2;
+			cout << "|" << setw(8) << left << num.ocenka3 <<"|" << endl;
+			cout << "---------------------------------------------------" << endl;
+		}
+		
+	}
+	mufile.close();
+}
+void setdan_2()
+{
+	ofstream mufile;
+	cout << "введите путь и имя файла: ";
+	cin >> namefile;
+	mufile.open(namefile);
+	if (!mufile.is_open())
+	{
+		cout << "произошла ошибка при открытии файла!!!" << endl;
+	}
+	else
+	{
+		int size;
+		cout << "введите количество студентов которое хотите записать: ";
+		cin >> size;
+		student* arr = new student[size];
+		SetConsoleCP(1251);
+		for (int i = 0; i < size; i++)
+		{
+			cout << "введите фамилию студента: ";
+			cin >> arr[i].familia;
+			cout << "введите номер группы: ";
+			cin >> arr[i].numbergroup;
+			cout << "введите оценку 1: ";
+			cin >> arr[i].ocenka1;
+			cout << "введите оценку 2: ";
+			cin >> arr[i].ocenka2;
+			cout << "введите оценку 3: ";
+			cin >> arr[i].ocenka3;
+		}
+		for (int i = 0; i < size; i++)
+		{
+			mufile << arr[i] << endl;
+		}
+		SetConsoleCP(866);
+		delete[] arr;
+	}
+	mufile.close();
+
+}
+void setdanend_3()
+{
+	ofstream mufile;
+	cout << "введите путь и имя файла: ";
+	cin >> namefile;
+	mufile.open(namefile, ofstream::app);
+	if (!mufile.is_open())
+	{
+		cout << "произошла ошибка при открытии файла!!!" << endl;
+	}
+	else
+	{
+		int size;
+		cout << "введите количество студентов которое хотите добавить: ";
+		cin >> size;
+		student* arr = new student[size];
+		SetConsoleCP(1251);
+		for (int i = 0; i < size; i++)
+		{
+			cout << "введите фамилию студента: ";
+			cin >> arr[i].familia;
+			cout << "введите номер группы: ";
+			cin >> arr[i].numbergroup;
+			cout << "введите оценку 1: ";
+			cin >> arr[i].ocenka1;
+			cout << "введите оценку 2: ";
+			cin >> arr[i].ocenka2;
+			cout << "введите оценку 3: ";
+			cin >> arr[i].ocenka3;
+		}
+		for (int i = 0; i < size; i++)
+		{
+			mufile << arr[i] << endl;
+		}
+		SetConsoleCP(866);
+		delete[] arr;
+	}
+	mufile.close();
+}
+void sortdan_4()
+{
+	int kolvo = 0;
+	ifstream mufile;
+	mufile.open(namefile);
+	if (!mufile.is_open())
+	{
+		cout << "произошла ошибка при открытии файла!!!" << endl;
+	}
+	else
+	{
+		
+		while (true)
+		{
+			student num;
+			mufile >> num;
+			if (mufile.eof())
+			{
+				break;
+			}
+			kolvo++;
+		}
+		mufile.close();
+		mufile.open(namefile);
+		student* arr = new student[kolvo];
+		for (int i = 0; i < kolvo; i++)
+		{
+			mufile >> arr[i];
+		}
+		mufile.close();
+		//сортировка пузырьком
+		for (int i = 0; i < kolvo - 1; i++)
+		{
+			for (int j = 0; j < kolvo - i - 1; j++)
+			{
+				if (arr[j].familia > arr[j + 1].familia)
+				{
+					swap(arr[j], arr[j + 1]);
+				}
+			}
+		}
+		ofstream a;
+		a.open(namefile);
+		for (int i = 0; i < kolvo; i++)
+		{
+			a << arr[i]<<"\n";
+		}
+		a.close();
+		delete[] arr;
+		cout << "СОРТИРОВКА ПРОШЛА УСПЕШНО!!!" << endl;
+	}
+
+}
+void getdandolg_5()
+{
+	int kolvo = 0;
+	ifstream mufile;
+	mufile.open(namefile);
+	if (!mufile.is_open())
+	{
+		cout << "произошла ошибка при открытии файла!!!" << endl;
+	}
+	else
+	{
+		while (true)
+		{
+			student num;
+			mufile >> num;
+			if (mufile.eof())
+			{
+				break;
+			}
+			if (num.ocenka1 < 4 || num.ocenka2 < 4 || num.ocenka3 < 4)
+			{
+				kolvo++;			
+			}
+			
+		}
+		mufile.close();
+		cout << "СПИСОК ЗАДОЛЖНИКОВ" << endl;
+		cout << "------------------------" << endl;
+		cout << "|" << setw(13) << left << "ФАМИЛИЯ" << "|" << setw(7) << left << "НОМЕР.ГР" <<"|" << endl;
+		cout << "------------------------" << endl;
+		student *dolg = new student[kolvo];
+		ifstream mufile;
+		mufile.open(namefile);
+		while (true)
+		{
+			student num;
+			mufile >> num;
+			if (mufile.eof())
+			{
+				break;
+			}
+			if (num.ocenka1<4 || num.ocenka2 < 4 || num.ocenka3 < 4)
+			{
+				dolg[kolvo-1] = num;
+				cout << "|" << setw(13) << left << dolg[kolvo-1].familia;
+				cout << "|" << setw(8) << left << dolg[kolvo-1].numbergroup<< "|" << endl;
+				cout << "------------------------" << endl;
+				kolvo--;
+			}
+		}
+		delete[] dolg;
+		
+
+	}
+	mufile.close();
+}
+void NAMBER1_6()
+{
+	ifstream mufile;
+	mufile.open(namefile);
+	if (!mufile.is_open())
+	{
+		cout << "произошла ошибка при открытии файла!!!" << endl;
+	}
+	else
+	{
+		cout << "СТУДЕНТ КОТОРЫЙ ЛУШЧЕ ВСЕХ СДАЛ ЭКЗАМЕН!!!" << endl;
+		cout << "------------------------------------" << endl;
+		cout << "|" << setw(13) << left << "ФАМИЛИЯ" << "|" << setw(7) << left << "НОМЕР.ГР" << "|" << setw(11)
+			<< left << "ЛУЧШИЙ_БАЛЛ" << "|" << endl;
+		cout << "------------------------------------" << endl;
+		student namVan;
+		float sred = 0;
+		while (true)
+		{
+			float sredbal = 0;
+			student num;
+			mufile >> num;
+			if (mufile.eof())
+			{
+				break;
+			}
+			if (sred < ((float)num.ocenka1 + (float)num.ocenka2 + (float)num.ocenka3)/3)
+			{
+				sred = ((float)num.ocenka1 + (float)num.ocenka2 + (float)num.ocenka3) / 3;
+				namVan = num;
+			}
+		}
+		cout << "|" << setw(13) << left << namVan.familia;
+		cout << "|" << setw(8) << left << namVan.numbergroup;
+		cout << "|" << setw(11) << left << sred << "|" << endl;
+		cout << "------------------------------------" << endl;
+
+	}
+	mufile.close();
+}
+void getdansredball_7()
+{
+	ifstream mufile;
+	mufile.open(namefile);
+	if (!mufile.is_open())
+	{
+		cout << "произошла ошибка при открытии файла!!!" << endl;
+	}
+	else
+	{
+		cout << "ТАБЛИЦА СТУДЕНТОВ" << endl;
+		cout << "------------------------------------" << endl;
+		cout << "|" << setw(13) << left << "ФАМИЛИЯ" << "|" << setw(7) << left << "НОМЕР.ГР" << "|" << setw(11)
+			<< left << "СРЕД.БАЛЛ_1" <<"|" << endl;
+		cout << "------------------------------------" << endl;
+		while (true)
+		{
+			float sredbal = 0;
+			student num;
+			mufile >> num;
+			if (mufile.eof())
+			{
+				break;
+			}
+			cout << "|" << setw(13) << left << num.familia;
+			cout << "|" << setw(8) << left << num.numbergroup;
+			cout << "|" << setw(11) << left <<((float)num.ocenka1+ (float)num.ocenka2+ (float)num.ocenka3)/3<<"|" << endl;
+			cout << "------------------------------------" << endl;
+		}
+
+	}
+	mufile.close();
+}
+int main()
+{
+	bool proverka = true;
+	int size;
+	setlocale(LC_ALL, "ru");
+	do {
+		vibor();
+		cout << "Ваш выбор: ";
+		string viborprov;
+		cin >> viborprov;;
+		try
+		{
+			size = stoi(viborprov);
+		}
+		catch (const std::exception &a)
+		{
+			cout << "Вы вели некоректные данные!!!"<<endl;
+			continue;
+		}
+		switch (size)
+		{
+		case 1:
+			getdan_1();
+			break;
+		case 2:
+			setdan_2();
+			break;
+		case 3:
+			setdanend_3();
+			break;
+		case 4:
+			sortdan_4();
+			break;
+		case 5:
+			getdandolg_5();
+			break;
+		case 6:
+			NAMBER1_6();
+			break;
+		case 7:
+			getdansredball_7();
+			break;
+		case 0:
+			proverka = false;
+			cout << "ПРОГРАММА ЗАВЕРШЕНА!!!";
+			break;
+		default:
+			cout << "Bы ввели некоректные данные!!!" << endl;
+			break;
+		}
+
+	} while (proverka);
+	return 0;
+}
