@@ -163,7 +163,7 @@ void sortdan_4()
 	mufile.open(namefile);
 	if (!mufile.is_open())
 	{
-		cout << "произошла ошибка при открытии файла!!!" << endl;
+		cout << "функция доступна после использования одного из пунктов: 1,2,3!" << endl;
 	}
 	else
 	{
@@ -216,7 +216,7 @@ void getdandolg_5()
 	mufile.open(namefile);
 	if (!mufile.is_open())
 	{
-		cout << "произошла ошибка при открытии файла!!!" << endl;
+		cout << "функция доступна после использования одного из пунктов: 1,2,3!" << endl;
 	}
 	else
 	{
@@ -235,35 +235,39 @@ void getdandolg_5()
 			
 		}
 		mufile.close();
-		cout << "СПИСОК ЗАДОЛЖНИКОВ" << endl;
-		cout << "------------------------" << endl;
-		cout << "|" << setw(13) << left << "ФАМИЛИЯ" << "|" << setw(7) << left << "НОМЕР.ГР" <<"|" << endl;
-		cout << "------------------------" << endl;
-		student *dolg = new student[kolvo];
-		ifstream mufile;
-		mufile.open(namefile);
-		while (true)
+		if (kolvo > 0)
 		{
-			student num;
-			mufile >> num;
-			if (mufile.eof())
+			cout << "СПИСОК ЗАДОЛЖНИКОВ" << endl;
+			cout << "------------------------" << endl;
+			cout << "|" << setw(13) << left << "ФАМИЛИЯ" << "|" << setw(7) << left << "НОМЕР.ГР" << "|" << endl;
+			cout << "------------------------" << endl;
+			student* dolg = new student[kolvo];
+			ifstream mufile;
+			mufile.open(namefile);
+			while (true)
 			{
-				break;
+				student num;
+				mufile >> num;
+				if (mufile.eof())
+				{
+					break;
+				}
+				if (num.ocenka1 < 4 || num.ocenka2 < 4 || num.ocenka3 < 4)
+				{
+					dolg[kolvo - 1] = num;
+					cout << "|" << setw(13) << left << dolg[kolvo - 1].familia;
+					cout << "|" << setw(8) << left << dolg[kolvo - 1].numbergroup << "|" << endl;
+					cout << "------------------------" << endl;
+					kolvo--;
+				}
 			}
-			if (num.ocenka1<4 || num.ocenka2 < 4 || num.ocenka3 < 4)
-			{
-				dolg[kolvo-1] = num;
-				cout << "|" << setw(13) << left << dolg[kolvo-1].familia;
-				cout << "|" << setw(8) << left << dolg[kolvo-1].numbergroup<< "|" << endl;
-				cout << "------------------------" << endl;
-				kolvo--;
-			}
+			delete[] dolg;
+			mufile.close();
 		}
-		delete[] dolg;
+		else
+			cout << "должников нету!" << endl;
 		
-
 	}
-	mufile.close();
 }
 void NAMBER1_6()
 {
@@ -271,7 +275,7 @@ void NAMBER1_6()
 	mufile.open(namefile);
 	if (!mufile.is_open())
 	{
-		cout << "произошла ошибка при открытии файла!!!" << endl;
+		cout << "функция доступна после использования одного из пунктов: 1,2,3!" << endl;
 	}
 	else
 	{
@@ -311,7 +315,7 @@ void getdansredball_7()
 	mufile.open(namefile);
 	if (!mufile.is_open())
 	{
-		cout << "произошла ошибка при открытии файла!!!" << endl;
+		cout << "функция доступна после использования одного из пунктов: 1,2,3!" << endl;
 	}
 	else
 	{
@@ -388,7 +392,6 @@ int main()
 			cout << "Bы ввели некоректные данные!!!" << endl;
 			break;
 		}
-
 	} while (proverka);
 	return 0;
 }
